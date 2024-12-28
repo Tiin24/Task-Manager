@@ -1,0 +1,132 @@
+openapi: 3.0.0
+info:
+  title: Tasks API
+  version: 1.0.0
+  description: A simple Express Tasks API
+servers:
+  - url: http://localhost:3000
+components:
+  schemas:
+    Task:
+      type: object
+      required:
+        - title
+      properties:
+        id:
+          type: string
+          description: The auto-generated id of the task
+        title:
+          type: string
+          description: The title of the task
+        description:
+          type: string
+          description: The description of the task
+      example:
+        id: d5fE_asz
+        title: Finish homework
+        description: Complete the math exercises
+paths:
+  /tasks:
+    get:
+      summary: Returns the list of all the tasks
+      tags: 
+        - Tasks
+      responses:
+        200:
+          description: The list of the tasks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+    post:
+      summary: Creates a new task
+      tags: 
+        - Tasks
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Task'
+      responses:
+        201:
+          description: The task was successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        400:
+          description: The title is missing
+  /tasks/{id}:
+    get:
+      summary: Gets a task by id
+      tags: 
+        - Tasks
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: The task id
+      responses:
+        200:
+          description: The task description by id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        404:
+          description: The task was not found
+    put:
+      summary: Updates a task by id
+      tags: 
+        - Tasks
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: The task id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Task'
+      responses:
+        200:
+          description: The task was successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        404:
+          description: The task was not found
+    delete:
+      summary: Deletes a task by id
+      tags: 
+        - Tasks
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: The task id
+      responses:
+        200:
+          description: The task was successfully deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Task deleted successfully
+        404:
+          description: The task was not found
